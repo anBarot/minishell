@@ -6,13 +6,13 @@
 #    By: abarot <abarot@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/07/02 20:31:48 by abarot            #+#    #+#              #
-#    Updated: 2020/07/23 17:11:06 by abarot           ###   ########.fr        #
+#    Updated: 2020/07/27 19:55:54 by abarot           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME	=	minishell
 
-SRCS	=	srcs/main.c srcs/ft_redirect_cmd.c srcs/list_ft.c
+SRCS	=	srcs/main.c srcs/ft_redirect_cmd.c srcs/list_ft.c srcs/env_ft.c
 
 OBJS	=	$(SRCS:.c=.o)
 

@@ -6,11 +6,19 @@
 /*   By: abarot <abarot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/02 20:37:55 by abarot            #+#    #+#             */
-/*   Updated: 2020/07/23 18:56:58 by abarot           ###   ########.fr       */
+/*   Updated: 2020/07/28 12:41:09 by abarot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	ft_show_current_dir()
+{
+	ft_putstr_fd(ANSI_COLOR_GREEN, 1);
+	ft_putstr_fd(g_shell.cwd, 1);
+	write (1, "$ " , 2);
+	ft_putstr_fd(ANSI_COLOR_RESET, 1);
+}
 
 int		ft_parse_cmd(char **cmd_arg)
 {
@@ -29,10 +37,11 @@ int		ft_parse_cmd(char **cmd_arg)
 	}
 	if (ft_redirect_cmd(cmd) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
+	ft_clear_list(&cmd);
 	return (EXIT_SUCCESS);
 }
 
-int		ft_get_entries()
+int		ft_rd_input()
 {
 	char *line;
 	char **cmd_list;
@@ -40,6 +49,7 @@ int		ft_get_entries()
 	char *tmp;
 	int		i;
 
+	ft_show_current_dir();
 	while (get_next_line(0, &line) != -1)
 	{
 		i = 0;
@@ -54,6 +64,7 @@ int		ft_get_entries()
 			i++;
 			free(tmp);
 		}
+		ft_show_current_dir();
 		free(cmd_list);
 		free(cmd_arg);
 		free(line);
@@ -61,9 +72,26 @@ int		ft_get_entries()
 	return (EXIT_FAILURE);
 }
 
-int		main()
+void ft_intHandler() 
 {
-	if (ft_get_entries() == EXIT_FAILURE)
+	kill(0, SIGTERM);
+	ft_show_current_dir();
+}
+
+int		main(int ac, char **av, char **envp)
+{
+	// struct dirent *entry;
+	signal(SIGINT, ft_intHandler);
+	if (!ac || !av || !envp)
 		return (EXIT_FAILURE);
+	if (!(g_shell.folder = opendir(".")))
+		return (EXIT_FAILURE);
+	// entry = readdir(g_shell.folder);
+	g_shell.cwd = getcwd(g_shell.cwd, PATH_MAX);
+	g_shell.env = envp;
+	if (ft_rd_input() == EXIT_FAILURE)
+		return (EXIT_FAILURE);
+	closedir(g_shell.folder);
+	free(g_shell.cwd);
 	return (EXIT_SUCCESS);
 }

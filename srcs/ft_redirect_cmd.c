@@ -6,7 +6,7 @@
 /*   By: abarot <abarot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/22 16:00:15 by abarot            #+#    #+#             */
-/*   Updated: 2020/07/23 18:55:58 by abarot           ###   ########.fr       */
+/*   Updated: 2020/07/27 19:18:16 by abarot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,9 @@
 
 int		ft_allowed_cmd(t_list *cmd)
 {
+	int i;
+	
+	i = 0;
 	if	(!ft_strncmp(cmd->data, "exit", ft_strlen(cmd->data)))
 	{
 		ft_clear_list(&cmd);
@@ -35,17 +38,42 @@ int		ft_allowed_cmd(t_list *cmd)
 			ft_putstr_fd(": No such file or directory\n", 1);
 			return (EXIT_FAILURE);
 		}
+		else 
+			g_shell.cwd = getcwd(g_shell.cwd, PATH_MAX);
 	}
-	// else if (ft_strncmp(cmd->data, "echo", ft_strlen(cmd->data)))
-	// 	ft_cmd_echo(cmd);
-	// else if	(ft_strncmp(cmd->data, "pwd", ft_strlen(cmd->data)))
-	// 	ft_cmd_pwd(cmd);
-	// else if	(ft_strncmp(cmd->data, "export", ft_strlen(cmd->data)))
-	// 	ft_cmd_export(cmd);
-	// else if	(ft_strncmp(cmd->data, "unset", ft_strlen(cmd->data)))
-	// 	ft_cmd_unset(cmd);
-	// else if	(ft_strncmp(cmd->data, "env", ft_strlen(cmd->data)))
-	// 	ft_cmd_env(cmd);
+	else if (!ft_strncmp(cmd->data, "echo", ft_strlen(cmd->data)))
+	{
+		cmd = cmd->next;
+		while (cmd->next)
+		{
+			ft_putstr_fd(cmd->data, 1);
+			cmd = cmd->next;
+			write(1, " ", 1);
+		}
+		ft_putstr_fd(cmd->data, 1);
+		write(1, "\n", 1);
+	}
+	else if	(!ft_strncmp(cmd->data, "pwd", ft_strlen(cmd->data)))
+	{	
+		ft_putstr_fd(g_shell.cwd, 1);
+		write (1, "\n" , 1);
+	}
+	else if	(!ft_strncmp(cmd->data, "export", ft_strlen(cmd->data)))
+	{
+		if (ft_strchr(cmd->next->data, '='))
+			ft_append_env(cmd->next->data);
+	}
+	else if	(!ft_strncmp(cmd->data, "unset", ft_strlen(cmd->data)))
+		ft_retreive_env(cmd->next->data);
+	else if	(!ft_strncmp(cmd->data, "env", ft_strlen(cmd->data)))
+	{
+		while (g_shell.env[i])
+		{
+			ft_putstr_fd(g_shell.env[i], 1);
+			write(1, "\n", 1);
+			i++;
+		}
+	}
 	else
 	{
 		ft_putstr_fd(cmd->data, 1);

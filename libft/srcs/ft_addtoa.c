@@ -6,7 +6,7 @@
 /*   By: abarot <abarot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/20 11:25:08 by abarot            #+#    #+#             */
-/*   Updated: 2020/07/03 11:51:00 by abarot           ###   ########.fr       */
+/*   Updated: 2020/07/28 15:03:12 by abarot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,12 @@
 
 void		ft_fill_addtoa(char *res, unsigned long n)
 {
-	static int	i = 0;
 	char		*hexchar;
 
 	hexchar = "0123456789abcdef";
 	if (n >= 16)
 		ft_fill_addtoa(res, n / 16);
-	res[i] = hexchar[(n % 16)];
-	i++;
+	res[ft_strlen(res)] = hexchar[(n % 16)];
 }
 
 char		*ft_addtoa(unsigned long n)
