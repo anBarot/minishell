@@ -1,20 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_is_empty.c                                      :+:      :+:    :+:   */
+/*   ft_count.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: abarot <abarot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/04/16 17:12:08 by abarot            #+#    #+#             */
-/*   Updated: 2020/04/20 14:49:07 by abarot           ###   ########.fr       */
+/*   Created: 2020/07/28 17:55:46 by abarot            #+#    #+#             */
+/*   Updated: 2020/07/28 18:01:34 by abarot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_is_empty(char c)
+int		ft_count(char *str, char *elt)
 {
-	if (c == '\0' || c == '\t' || c == ' ')
-		return (1);
-	return (0);
+	int count;
+
+	count = 0;
+	if (!str || !elt)
+		return (0);
+	while (*str)
+	{
+		if (!ft_strncmp(str, elt, ft_strlen(elt)))
+			count++;
+		str++;
+	}
+	return (count);
 }

@@ -6,7 +6,7 @@
 /*   By: abarot <abarot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/22 16:00:15 by abarot            #+#    #+#             */
-/*   Updated: 2020/07/27 19:18:16 by abarot           ###   ########.fr       */
+/*   Updated: 2020/07/29 00:26:04 by abarot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,10 @@ int		ft_allowed_cmd(t_list *cmd)
 			return (EXIT_FAILURE);
 		}
 		else 
+		{
 			g_shell.cwd = getcwd(g_shell.cwd, PATH_MAX);
+			g_shell.r_cwd = ft_replace_in_str(g_shell.cwd, ft_get_value(g_shell.env, "HOME", '='), "~");
+		}
 	}
 	else if (!ft_strncmp(cmd->data, "echo", ft_strlen(cmd->data)))
 	{

@@ -6,7 +6,7 @@
 /*   By: abarot <abarot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/02 20:37:55 by abarot            #+#    #+#             */
-/*   Updated: 2020/07/28 12:41:09 by abarot           ###   ########.fr       */
+/*   Updated: 2020/07/29 00:23:47 by abarot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,11 @@
 
 void	ft_show_current_dir()
 {
+	ft_putstr_fd(ANSI_COLOR_BLUE, 1);
+	ft_putstr_fd(ft_get_value(g_shell.env, "LOGNAME", '='), 1);
+	ft_putstr_fd(":", 1);
 	ft_putstr_fd(ANSI_COLOR_GREEN, 1);
-	ft_putstr_fd(g_shell.cwd, 1);
+	ft_putstr_fd(g_shell.r_cwd, 1);
 	write (1, "$ " , 2);
 	ft_putstr_fd(ANSI_COLOR_RESET, 1);
 }
@@ -87,8 +90,9 @@ int		main(int ac, char **av, char **envp)
 	if (!(g_shell.folder = opendir(".")))
 		return (EXIT_FAILURE);
 	// entry = readdir(g_shell.folder);
-	g_shell.cwd = getcwd(g_shell.cwd, PATH_MAX);
 	g_shell.env = envp;
+	g_shell.cwd = getcwd(g_shell.cwd, PATH_MAX);
+	g_shell.r_cwd = ft_replace_in_str(g_shell.cwd, ft_get_value(g_shell.env, "HOME", '='), "~");
 	if (ft_rd_input() == EXIT_FAILURE)
 		return (EXIT_FAILURE);
 	closedir(g_shell.folder);

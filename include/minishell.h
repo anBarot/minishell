@@ -6,7 +6,7 @@
 /*   By: abarot <abarot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/02 20:40:09 by abarot            #+#    #+#             */
-/*   Updated: 2020/07/28 12:03:52 by abarot           ###   ########.fr       */
+/*   Updated: 2020/07/29 00:11:12 by abarot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ struct s_list
 typedef struct s_shell
 {
 	char		*cwd;
+	char		*r_cwd;
 	char		**env;
 	DIR			*folder;
 }				t_shell;
@@ -52,11 +53,11 @@ typedef struct s_shell
 t_shell g_shell;
 
 int		ft_redirect_cmd(t_list *cmd);
-// void 	ft_cmd_export(t_list *cmd);
-// void 	ft_cmd_unset(t_list *cmd);
 void	ft_clear_list(t_list **cmd);
 int		ft_list_size(t_list *list);
 int		ft_append_elt(t_list **list, char *elt);
 void	ft_append_env(char *str);
 void	ft_retreive_env(char *str);
+char	*ft_get_value(char **env, char *var, char sep);
+int		ft_varsize(char *var);
 #endif

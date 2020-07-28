@@ -6,7 +6,7 @@
 /*   By: abarot <abarot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/27 18:44:37 by abarot            #+#    #+#             */
-/*   Updated: 2020/07/28 15:19:54 by abarot           ###   ########.fr       */
+/*   Updated: 2020/07/28 16:34:00 by abarot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,16 @@ int		ft_varsize(char *var)
 	return (i);
 }
 
-char	*ft_get_varval(char *var, char sep)
+char	*ft_get_value(char **env, char *var, char sep)
 {
-	while (*var && *var != sep)
-		var++;
-	if (*var)
-		var++;
-	return (var);
+	int i;
+
+	i = 0;
+	while (ft_strncmp(env[i], var, ft_max_value(ft_varsize(env[i]), ft_varsize(var))))
+		i++;
+	if (ft_strchr(env[i], sep))
+		return (ft_strchr(env[i], sep) + 1);
+	return (0);
 }
 
 void	ft_append_env(char *str)
@@ -55,7 +58,8 @@ void ft_retreive_env(char *str)
 	int i;
 
 	i = 0;
-	while (g_shell.env[i] && ft_strncmp(str, g_shell.env[i], ft_strlen(str)))
+	while (g_shell.env[i] && ft_strncmp(str, g_shell.env[i], 
+			ft_max_value(ft_varsize(g_shell.env[i]), ft_varsize(str))))
 		i++;
 	if (!ft_strncmp(str, g_shell.env[i], ft_strlen(str)))
 	{
@@ -63,6 +67,7 @@ void ft_retreive_env(char *str)
 		while (g_shell.env[i + 1])
 		{
 			g_shell.env[i] = g_shell.env[i + 1];
+			i++;
 		}
 			g_shell.env[i] = 0;
 	}
