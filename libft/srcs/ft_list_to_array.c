@@ -1,30 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlcpy.c                                       :+:      :+:    :+:   */
+/*   ft_list_to_array.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: abarot <abarot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/10/07 14:55:06 by abarot            #+#    #+#             */
-/*   Updated: 2020/07/29 11:46:07 by abarot           ###   ########.fr       */
+/*   Created: 2020/07/29 12:29:26 by abarot            #+#    #+#             */
+/*   Updated: 2020/07/29 12:48:39 by abarot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-size_t	ft_strlcpy(char *dst, const char *src, size_t n)
+void **ft_list_to_array(t_list *list)
 {
-	int i;
+	void	**res;
+	int		i;
 
 	i = 0;
-	if (!n)
-		return (ft_strlen(src));
-	while (src[i] && n)
+	if (!(res = malloc(ft_list_size(list))))
+		return (0);
+	while (list)
 	{
-		dst[i] = src[i];
+		res[i] = list->data;
 		i++;
-		n--;
+		list = list->next;
 	}
-	dst[i] = '\0';
-	return (ft_strlen(src));
+	return (res);
 }

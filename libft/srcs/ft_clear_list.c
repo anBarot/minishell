@@ -1,30 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlcpy.c                                       :+:      :+:    :+:   */
+/*   ft_clear_list.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: abarot <abarot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/10/07 14:55:06 by abarot            #+#    #+#             */
-/*   Updated: 2020/07/29 11:46:07 by abarot           ###   ########.fr       */
+/*   Created: 2020/07/30 14:36:26 by abarot            #+#    #+#             */
+/*   Updated: 2020/07/30 14:42:09 by abarot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-size_t	ft_strlcpy(char *dst, const char *src, size_t n)
+void	ft_clear_list(t_list **list)
 {
-	int i;
+	t_list	*tmp;
 
-	i = 0;
-	if (!n)
-		return (ft_strlen(src));
-	while (src[i] && n)
+	while ((*list)->next)
 	{
-		dst[i] = src[i];
-		i++;
-		n--;
+		tmp = *list;
+		free((*list)->data);
+		*list = (*list)->next;
+		free(tmp);
 	}
-	dst[i] = '\0';
-	return (ft_strlen(src));
+	free((*list)->data);
+	free(*list);
 }

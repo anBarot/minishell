@@ -6,15 +6,15 @@
 /*   By: abarot <abarot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/02 20:40:09 by abarot            #+#    #+#             */
-/*   Updated: 2020/07/29 00:11:12 by abarot           ###   ########.fr       */
+/*   Updated: 2020/08/25 16:37:03 by abarot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 // todo list :
-//		- fonction attente commande
 //		- gestion pipe dans redirection cmd
-//		- fonction replace env ($var -> env) pour echo
-//		- get LOGNAME@SESSION_MANAGER
+//		- fonction replace env ($var -> env) pour echo 
+// 		- option -n echo
+// 		- gestion si unset home
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
@@ -34,28 +34,22 @@
 # define ANSI_COLOR_CYAN    "\x1b[36m"
 # define ANSI_COLOR_RESET   "\x1b[0m"
 # define PATH_MAX        4096
-typedef struct s_list t_list;
-
-struct s_list
-{
-	char 	*data;
-	t_list	*next;
-};
 
 typedef struct s_shell
 {
 	char		*cwd;
 	char		*r_cwd;
 	char		**env;
+	char		**argv;
 	DIR			*folder;
 }				t_shell;
 
 t_shell g_shell;
+t_list	*g_garb_cltor;
 
+void	ft_set_cwd();
 int		ft_redirect_cmd(t_list *cmd);
-void	ft_clear_list(t_list **cmd);
-int		ft_list_size(t_list *list);
-int		ft_append_elt(t_list **list, char *elt);
+void	ft_show_env();
 void	ft_append_env(char *str);
 void	ft_retreive_env(char *str);
 char	*ft_get_value(char **env, char *var, char sep);
