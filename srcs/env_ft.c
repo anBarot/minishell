@@ -6,7 +6,7 @@
 /*   By: abarot <abarot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/27 18:44:37 by abarot            #+#    #+#             */
-/*   Updated: 2020/08/25 15:56:24 by abarot           ###   ########.fr       */
+/*   Updated: 2020/08/28 11:30:31 by abarot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,8 @@ char	*ft_get_value(char **env, char *var, char sep)
 	int i;
 
 	i = 0;
-	while (env[i] && ft_strncmp(env[i], var, ft_max_value(ft_varsize(env[i]), ft_varsize(var))))
+	while (env[i] && ft_strncmp(env[i], var, 
+						ft_max_value(ft_varsize(env[i]), ft_varsize(var))))
 		i++;
 	if (ft_strchr(env[i], sep))
 		return (ft_strchr(env[i], sep) + 1);

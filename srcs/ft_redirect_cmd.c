@@ -6,7 +6,7 @@
 /*   By: abarot <abarot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/22 16:00:15 by abarot            #+#    #+#             */
-/*   Updated: 2020/08/25 18:12:53 by abarot           ###   ########.fr       */
+/*   Updated: 2020/08/28 11:27:54 by abarot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,27 @@ int	cd_cmd(t_list *cmd)
 	return (EXIT_SUCCESS);
 }
 
+void	ft_exec(t_list *cmd)
+{
+	pid_t	pid;
+	int		status;
+
+	pid = 0;
+	status = 0;
+	if ((pid = fork()) == -1)
+		perror("minishell: fork:");
+	else if (pid > 0)
+	{
+		waitpid(pid, &status, 0);
+		kill(pid, SIGTERM);
+	} 
+	else 
+	{
+		if	(execve(cmd->data, (char **)ft_list_to_array(cmd), g_shell.env) == EXIT_FAILURE)
+			exit(EXIT_FAILURE);
+	}
+}
+
 int		ft_allowed_cmd(t_list *cmd)
 {
 	if	(!ft_strncmp(cmd->data, "exit", ft_strlen(cmd->data)))
@@ -83,25 +104,7 @@ int		ft_allowed_cmd(t_list *cmd)
 	else if	(!ft_strncmp(cmd->data, "env", ft_strlen(cmd->data)))
 		ft_show_env();
 	else
-	{
-		pid_t	pid;
-		int		status;
-
-		pid = 0;
-		status = 0;
-		if ((pid = fork()) == -1)
-			perror("minishell: fork:");
-		else if (pid > 0) 
-		{
-			waitpid(pid, &status, 0);
-			kill(pid, SIGTERM);
-		} 
-		else 
-		{
-			if	(execve(cmd->data, (char **)ft_list_to_array(cmd), g_shell.env) == EXIT_FAILURE)
-				exit(EXIT_FAILURE);
-		}
-	}
+		ft_exec(cmd);
 	return (EXIT_SUCCESS);
 }
 

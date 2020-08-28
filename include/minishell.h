@@ -6,15 +6,16 @@
 /*   By: abarot <abarot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/02 20:40:09 by abarot            #+#    #+#             */
-/*   Updated: 2020/08/25 16:37:03 by abarot           ###   ########.fr       */
+/*   Updated: 2020/08/28 11:12:46 by abarot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 // todo list :
 //		- gestion pipe dans redirection cmd
-//		- fonction replace env ($var -> env) pour echo 
+//		- fonction replace variables env
 // 		- option -n echo
 // 		- gestion si unset home
+// 		- supprimer étape liste -> juste tableau
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
