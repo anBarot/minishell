@@ -6,7 +6,7 @@
 /*   By: abarot <abarot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/28 17:50:53 by abarot            #+#    #+#             */
-/*   Updated: 2020/07/29 11:46:00 by abarot           ###   ########.fr       */
+/*   Updated: 2020/09/04 16:14:16 by abarot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ char	*ft_replace_in_str(char *old_str, char *to_replace, char *elt)
 
 	i_nstr = 0;
 	if (!old_str || !elt || !(n_str = ft_calloc(ft_strlen(old_str) + 
-		(ft_count(old_str, elt) * ft_strlen(elt)), 1)))
+		(ft_count_elt(old_str, to_replace) * ft_strlen(elt)), 1)))
 		return (0);
 	while (*old_str)
 	{

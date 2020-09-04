@@ -1,34 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_append_elt.c                                    :+:      :+:    :+:   */
+/*   ft_count.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: abarot <abarot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/07/30 14:37:12 by abarot            #+#    #+#             */
-/*   Updated: 2020/08/28 12:10:56 by abarot           ###   ########.fr       */
+/*   Created: 2020/07/28 17:55:46 by abarot            #+#    #+#             */
+/*   Updated: 2020/09/03 13:57:29 by abarot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int		ft_append_elt(t_list **list, void *elt)
+int		ft_count_elt(char *str, char *elt)
 {
-	t_list	*new_elt;
-	t_list	*head;
+	int count;
 
-	head = *list;
-	if (!list || !elt || !(new_elt = malloc(sizeof(t_list))))
-		return (EXIT_FAILURE);
-	new_elt->data = elt;
-	new_elt->next = 0;
-	if (!(*list))
+	count = 0;
+	if (!str || !elt)
+		return (0);
+	while (*str)
 	{
-		(*list) = new_elt;
-		return (EXIT_SUCCESS);
+		if (!ft_strncmp(str, elt, ft_strlen(elt)))
+			count++;
+		str++;
 	}
-	while (head->next)
-		head = head->next;
-	head->next = new_elt;
-	return (EXIT_SUCCESS);
+	return (count);
 }

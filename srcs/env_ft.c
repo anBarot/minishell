@@ -6,7 +6,7 @@
 /*   By: abarot <abarot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/27 18:44:37 by abarot            #+#    #+#             */
-/*   Updated: 2020/08/28 11:30:31 by abarot           ###   ########.fr       */
+/*   Updated: 2020/09/02 16:27:03 by abarot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,8 @@ void	ft_append_env(char *str)
 	int i;
 
 	i = 0;
+	if (!ft_strchr(str, '='))
+		return ;
 	while (g_shell.env[i] && ft_strncmp(str, g_shell.env[i], 
 			ft_max_value(ft_varsize(g_shell.env[i]), ft_varsize(str))))
 		i++;

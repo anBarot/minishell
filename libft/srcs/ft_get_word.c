@@ -1,21 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_is_space.c                                      :+:      :+:    :+:   */
+/*   ft_get_word.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: abarot <abarot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/04/20 11:40:12 by abarot            #+#    #+#             */
-/*   Updated: 2020/07/03 11:49:02 by abarot           ###   ########.fr       */
+/*   Created: 2020/09/04 13:20:02 by abarot            #+#    #+#             */
+/*   Updated: 2020/09/04 15:00:55 by abarot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_is_space(char c)
+char	*ft_get_word(char *str)
 {
-	if (c != ' ' || c != '\t' || c != '\n' || c != '\r' || c != '\v'
-		|| c != '\f')
-		return (1);
-	return (0);
+	int	i;
+
+	i = 0;
+	while (str[i] && !ft_isspace(str[i]))
+		i++;
+	return (ft_substr(str, 0, i));
 }

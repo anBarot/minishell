@@ -6,7 +6,7 @@
 /*   By: abarot <abarot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/09 17:31:34 by abarot            #+#    #+#             */
-/*   Updated: 2020/07/30 14:39:14 by abarot           ###   ########.fr       */
+/*   Updated: 2020/09/04 13:26:47 by abarot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,7 @@ int			ft_isalnum(int c);
 int			ft_isalpha(int c);
 int			ft_isascii(int c);
 int			ft_isdigit(int c);
-int			ft_is_space(char c);
-int			ft_is_empty(char c);
+int			ft_isspace(char c);
 int			ft_isprint(int c);
 void		*ft_memccpy(void *dest, const void *src, int c, size_t n);
 void		*ft_memchr(const void *s, int c, size_t n);
@@ -74,9 +73,12 @@ char		*ft_remove_in_str(char *str, char *char_set);
 char		*ft_replace_in_str(char *old_str, char *to_replace, char *elt);
 int			ft_count_line(char **map);
 int			ft_max_value(int a, int b);
-int			ft_count(char *str, char *elt);
+int			ft_count_elt(char *str, char *elt);
 void 		**ft_list_to_array(t_list *list);
 int			ft_list_size(t_list *list);
 void		ft_clear_list(t_list **list);
 int			ft_append_elt(t_list **list, void *elt);
+int			ft_issamestr(char *s1, char *s2);
+char		*ft_insert(char *str, char *elt, int index);
+char		*ft_get_word(char *str);
 #endif

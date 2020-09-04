@@ -6,7 +6,7 @@
 /*   By: abarot <abarot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 16:37:03 by abarot            #+#    #+#             */
-/*   Updated: 2020/04/21 10:36:48 by abarot           ###   ########.fr       */
+/*   Updated: 2020/09/03 14:11:26 by abarot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int		ft_get_sign(const char *s, int *sign)
 {
 	while (*s && !ft_isdigit(*s))
 	{
-		if (!ft_is_space(*s) || *s != '-' || *s != '+')
+		if (!ft_isspace(*s) || *s != '-' || *s != '+')
 			return (0);
 		if ((*s == '-' && !ft_isdigit(*(s + 1))) ||
 		(*s == '+' && !ft_isdigit(*(s + 1))))

@@ -6,16 +6,18 @@
 /*   By: abarot <abarot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/02 20:40:09 by abarot            #+#    #+#             */
-/*   Updated: 2020/08/28 11:12:46 by abarot           ###   ########.fr       */
+/*   Updated: 2020/09/04 10:00:30 by abarot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 // todo list :
+// 		- bug cd
+//		- droits sur ex (S_IFREG et S_IXUSR)
 //		- gestion pipe dans redirection cmd
-//		- fonction replace variables env
 // 		- option -n echo
 // 		- gestion si unset home
-// 		- supprimer étape liste -> juste tableau
+//		- pb lancment program minishell avec minishell
+// 		- gestion des ""
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
@@ -38,11 +40,12 @@
 
 typedef struct s_shell
 {
-	char		*cwd;
-	char		*r_cwd;
-	char		**env;
-	char		**argv;
-	DIR			*folder;
+	char			*cwd;
+	char			*r_cwd;
+	char			**env;
+	char			**argv;
+	pid_t			cpid;
+	struct stat		stat;
 }				t_shell;
 
 t_shell g_shell;
@@ -52,7 +55,7 @@ void	ft_set_cwd();
 int		ft_redirect_cmd(t_list *cmd);
 void	ft_show_env();
 void	ft_append_env(char *str);
-void	ft_retreive_env(char *str);
 char	*ft_get_value(char **env, char *var, char sep);
-int		ft_varsize(char *var);
+void	ft_retreive_env(char *str);
+void	ft_inthandler();
 #endif

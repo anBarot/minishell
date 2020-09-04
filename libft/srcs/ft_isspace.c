@@ -1,34 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_append_elt.c                                    :+:      :+:    :+:   */
+/*   ft_isspace.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: abarot <abarot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/07/30 14:37:12 by abarot            #+#    #+#             */
-/*   Updated: 2020/08/28 12:10:56 by abarot           ###   ########.fr       */
+/*   Created: 2020/04/20 11:40:12 by abarot            #+#    #+#             */
+/*   Updated: 2020/09/04 14:24:33 by abarot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int		ft_append_elt(t_list **list, void *elt)
+int	ft_isspace(char c)
 {
-	t_list	*new_elt;
-	t_list	*head;
-
-	head = *list;
-	if (!list || !elt || !(new_elt = malloc(sizeof(t_list))))
-		return (EXIT_FAILURE);
-	new_elt->data = elt;
-	new_elt->next = 0;
-	if (!(*list))
-	{
-		(*list) = new_elt;
-		return (EXIT_SUCCESS);
-	}
-	while (head->next)
-		head = head->next;
-	head->next = new_elt;
-	return (EXIT_SUCCESS);
+	if (c == ' ' || c == '\t' || c == '\n' || c == '\r' || c == '\v'
+		|| c == '\f')
+		return (1);
+	return (0);
 }

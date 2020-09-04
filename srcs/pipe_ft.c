@@ -1,34 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_append_elt.c                                    :+:      :+:    :+:   */
+/*   pipe_ft.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: abarot <abarot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/07/30 14:37:12 by abarot            #+#    #+#             */
-/*   Updated: 2020/08/28 12:10:56 by abarot           ###   ########.fr       */
+/*   Created: 2020/09/01 15:23:28 by abarot            #+#    #+#             */
+/*   Updated: 2020/09/04 09:51:14 by abarot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minishell.h"
 
-int		ft_append_elt(t_list **list, void *elt)
+int		ft_manage_pipe(char **pipe_list)
 {
-	t_list	*new_elt;
-	t_list	*head;
-
-	head = *list;
-	if (!list || !elt || !(new_elt = malloc(sizeof(t_list))))
-		return (EXIT_FAILURE);
-	new_elt->data = elt;
-	new_elt->next = 0;
-	if (!(*list))
-	{
-		(*list) = new_elt;
-		return (EXIT_SUCCESS);
-	}
-	while (head->next)
-		head = head->next;
-	head->next = new_elt;
+	if (pipe_list)
+		printf("\npipe detected\n");
 	return (EXIT_SUCCESS);
 }
+ 

@@ -1,29 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_count.c                                         :+:      :+:    :+:   */
+/*   ft_samestr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: abarot <abarot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/07/28 17:55:46 by abarot            #+#    #+#             */
-/*   Updated: 2020/07/28 18:01:34 by abarot           ###   ########.fr       */
+/*   Created: 2020/09/02 16:16:55 by abarot            #+#    #+#             */
+/*   Updated: 2020/09/02 16:22:38 by abarot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-
-int		ft_count(char *str, char *elt)
+int		ft_issamestr(char *s1, char *s2)
 {
-	int count;
+	int i;
 
-	count = 0;
-	if (!str || !elt)
+	i = 0;
+	if (!s1 || !s2)
 		return (0);
-	while (*str)
+	while (s1[i] || s2[i])
 	{
-		if (!ft_strncmp(str, elt, ft_strlen(elt)))
-			count++;
-		str++;
+		if (s1[i] != s2[i])
+			return (0);
+		i++;
 	}
-	return (count);
+	return (1);
 }
