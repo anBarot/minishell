@@ -6,7 +6,7 @@
 /*   By: abarot <abarot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/22 16:00:15 by abarot            #+#    #+#             */
-/*   Updated: 2020/09/03 19:44:55 by abarot           ###   ########.fr       */
+/*   Updated: 2020/09/09 14:44:31 by abarot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,34 @@
 
 void	echo_cmd(t_list *cmd)
 {
-	while (cmd->next)
+	if (!ft_issamestr(cmd->next->data, "-n"))
+	{
+		while (cmd->next)
+		{
+			cmd = cmd->next;
+			if (cmd->data)
+			{
+				ft_putstr_fd(cmd->data, 1);
+				if (cmd->next)
+					write(1, " ", 1);
+			}
+		}
+		write (1, "\n", 1);
+	}
+	else
 	{
 		cmd = cmd->next;
-		if (cmd->data)
+		while (cmd->next)
 		{
-			ft_putstr_fd(cmd->data, 1);
-			write(1, " ", 1);
+			cmd = cmd->next;
+			if (cmd->data)
+			{
+				ft_putstr_fd(cmd->data, 1);
+				if (cmd->next)
+					write(1, " ", 1);
+			}
 		}
 	}
-	write (1, "\n", 1);
 }
 
 void	cd_cmd(t_list *cmd)

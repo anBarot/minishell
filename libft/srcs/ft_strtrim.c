@@ -6,7 +6,7 @@
 /*   By: abarot <abarot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/08 13:35:26 by abarot            #+#    #+#             */
-/*   Updated: 2019/10/11 11:20:19 by abarot           ###   ########.fr       */
+/*   Updated: 2020/09/09 11:51:00 by abarot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ char		*ft_strtrim(char const *s1, char const *set)
 	int		begin;
 	int		end;
 
+	if (!s1 || !set)
+		return (0);
 	begin = 0;
 	end = ft_strlen(s1) - 1;
 	while (ft_checktrim(s1[begin], set) == 1)

@@ -1,30 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_get_word.c                                      :+:      :+:    :+:   */
+/*   signal_handling.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: abarot <abarot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/09/04 13:20:02 by abarot            #+#    #+#             */
-/*   Updated: 2020/09/09 14:49:16 by abarot           ###   ########.fr       */
+/*   Created: 2020/09/04 16:26:16 by abarot            #+#    #+#             */
+/*   Updated: 2020/09/04 16:26:45 by abarot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minishell.h"
 
-char	*ft_get_word(char *str)
+void ft_quithandler() 
 {
-	int	w_s;
-	int	w_end;
+	//quit signal à voir
+	printf("\nQuit signal detected\n");
+}
 
-	w_s = 0;
-	w_end = 0;
-	while (str[w_s] && (ft_isspace(str[w_s]) || str[w_s] == ';'))
-		w_s++;
-	if (!str[w_s])
-		return (0);
-	w_end = w_s + 1;
-	while (str[w_end] && !ft_isspace(str[w_end]) && str[w_end] != ';')
-		w_end++;
-	return (ft_substr(str, w_s, w_end));
+void ft_inthandler() 
+{
+	//interrup signal à voir
+	if (g_shell.cpid)
+		kill(g_shell.cpid, SIGTERM);
+	else
+	{
+		write(1, "\n", 1);
+		ft_show_current_dir();
+	}
 }
