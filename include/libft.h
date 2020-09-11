@@ -6,7 +6,7 @@
 /*   By: abarot <abarot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/09 17:31:34 by abarot            #+#    #+#             */
-/*   Updated: 2020/09/09 11:54:40 by abarot           ###   ########.fr       */
+/*   Updated: 2020/09/10 09:37:04 by abarot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ char		*ft_remove_in_str(char *str, char *char_set);
 char		*ft_replace_in_str(char *old_str, char *to_replace, char *elt);
 int			ft_count_line(char **map);
 int			ft_max_value(int a, int b);
-int			ft_count_elt(char *str, char *elt);
+size_t		ft_count_elt(char *str, char *elt);
 void 		**ft_list_to_array(t_list *list);
 int			ft_list_size(t_list *list);
 void		ft_clear_list(t_list **list);

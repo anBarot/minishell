@@ -6,7 +6,7 @@
 /*   By: abarot <abarot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/04 16:26:16 by abarot            #+#    #+#             */
-/*   Updated: 2020/09/04 16:26:45 by abarot           ###   ########.fr       */
+/*   Updated: 2020/09/10 09:12:00 by abarot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,6 @@ void ft_inthandler()
 	else
 	{
 		write(1, "\n", 1);
-		ft_show_current_dir();
+		ft_show_prompt_line();
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: abarot <abarot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/09 15:15:17 by abarot            #+#    #+#             */
-/*   Updated: 2020/09/09 18:16:35 by abarot           ###   ########.fr       */
+/*   Updated: 2020/09/11 18:45:14 by abarot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,24 +16,38 @@ int		ft_create_cmdlist(char *cmd)
 {
 	t_list	*cmdlist;
 	char	*elt;
+	int		fd_in;
+	int		fd_out;
 
 	cmdlist = 0;
 	elt = 0;
+	fd_in = 0;
+	fd_out = 1;
 	while (*cmd)
 	{
+		printf("\ncmd : %s\n", cmd);
 		if (*cmd == '\"' || *cmd == '\'')
 			elt = ft_get_string(cmd);
 		else
 			elt = ft_get_word(cmd);
-		if (elt)
+		if (elt && *cmd != '<' && *cmd != '>')
 			ft_append_elt(&cmdlist, elt);
-		cmd += ft_strlen(elt);
+		if (*cmd == '\"' || *cmd == '\'')
+			cmd += 2;
+		else if (*cmd == '>' || *cmd == '<')
+		{
+			if (ft_redirection(cmd, &fd_in, &fd_out) == EXIT_FAILURE)
+				return (EXIT_FAILURE);
+			break;
+		}
+		if (*cmd)
+			cmd += ft_strlen(elt);
 		while (*cmd == ' ')
 			cmd++;
 		if (!ft_strlen(elt))
 			break;
 	}
-	if (ft_redirect_cmd(cmdlist) == EXIT_FAILURE)
+	if (ft_redirect_cmd(cmdlist, fd_in, fd_out) == EXIT_FAILURE)
 	{
 		ft_putstr_fd(cmdlist->data, 1);
 		ft_putstr_fd(": command not found\n", 1);
@@ -47,30 +61,32 @@ int		ft_create_cmdlist(char *cmd)
 int 	ft_parse_cmdline(char *cmd_line)
 {
 	char	*cmd;
-	int		cmd_s;
 	int		cmd_end;
 
-	cmd_s = 0;
 	cmd_end = 0;
 	if (!cmd_line)
 		return (EXIT_SUCCESS);
-	while (cmd_line[cmd_end])
+	while (*cmd_line)
 	{
-		while (cmd_line[cmd_end] && (cmd_line[cmd_end] != ';' || 
-				(ft_count_elt(cmd_line + cmd_end, "\"") % 2 == 1 ||
-					ft_count_elt(cmd_line + cmd_end, "\'") % 2 == 1)))
-				cmd_end++;
-		cmd = ft_substr(cmd_line, cmd_s, (cmd_end - cmd_s));
+		while (!cmd_end)
+		{
+			if (!(ft_strchr(cmd_line, ';')))
+				cmd_end = ft_strlen(cmd_line);
+			else if (!(ft_count_elt(cmd_line + cmd_end, "\"") % 2) ||
+					!(ft_count_elt(cmd_line + cmd_end, "\'") % 2))
+				cmd_end = ft_strchr(cmd_line, ';') - cmd_line;
+			else
+				cmd_end = ft_strlen(cmd_line);
+		}
+		cmd = ft_substr(cmd_line, 0, cmd_end);
 		if (cmd)
 			ft_append_elt(&g_garb_cltor, cmd);
-		// if (ft_syntax_error(cmd_line))
-		// {
-		// 	ft_putstr_fd("minishell: syntax error near unexpected token", 1);
-		// 	return (EXIT_FAILURE);
-		// }
 		ft_create_cmdlist(cmd);
 		cmd_end++;
-		cmd_s = cmd_end;
+		cmd_line += cmd_end;
+		while (*cmd_line == ' ')
+			cmd_line++;
+		cmd_end = 0;
 	}
 	return (EXIT_SUCCESS);
 }
@@ -107,7 +123,7 @@ char	*ft_get_cmd_r(char *cmd_line)
 	while (*cmd_line)
 	{
 		if (*cmd_line == '~' && !(ft_count_elt(cmd_line, "\'") % 2) 
-				&& !(ft_count_elt(cmd_line, "\'") % 2))
+				&& !(ft_count_elt(cmd_line, "\"") % 2))
 			res = ft_replace_in_str(res, "~", g_shell.tilde);
 		else if (*cmd_line == '$' && (*(cmd_line - 1) != '\\' &&
 			!(ft_count_elt(cmd_line, "\'") % 2)))
@@ -130,7 +146,7 @@ char	*ft_multiline_mng(char *line)
 		if (get_next_line(0, &line) == 0 && (ft_count_elt(line, "\"") % 2 != 1
 				|| ft_count_elt(line, "\'") % 2 != 1))
 			return ("\0");
-		cmd_line = ft_strjoin(cmd_line,"\\n");
+		cmd_line = ft_insert(cmd_line, "\\n", ft_strlen(cmd_line));
 		ft_append_elt(&(g_garb_cltor), cmd_line);
 		cmd_line = ft_strjoin(cmd_line, line);
 		ft_append_elt(&(g_garb_cltor), cmd_line);

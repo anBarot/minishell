@@ -6,7 +6,7 @@
 /*   By: abarot <abarot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/04 13:20:02 by abarot            #+#    #+#             */
-/*   Updated: 2020/09/09 14:49:16 by abarot           ###   ########.fr       */
+/*   Updated: 2020/09/11 17:43:40 by abarot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ char	*ft_get_word(char *str)
 
 	w_s = 0;
 	w_end = 0;
-	while (str[w_s] && (ft_isspace(str[w_s]) || str[w_s] == ';'))
+	while (str[w_s] && (ft_isspace(str[w_s]) || str[w_s] == ';' || 
+			str[w_s] == '>' || str[w_s] == '<'))
 		w_s++;
 	if (!str[w_s])
 		return (0);

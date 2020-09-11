@@ -6,42 +6,31 @@
 /*   By: abarot <abarot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/22 16:00:15 by abarot            #+#    #+#             */
-/*   Updated: 2020/09/09 14:44:31 by abarot           ###   ########.fr       */
+/*   Updated: 2020/09/11 18:42:26 by abarot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	echo_cmd(t_list *cmd)
+void	echo_cmd(t_list *cmd, int fd_out)
 {
-	if (!ft_issamestr(cmd->next->data, "-n"))
-	{
-		while (cmd->next)
-		{
-			cmd = cmd->next;
-			if (cmd->data)
-			{
-				ft_putstr_fd(cmd->data, 1);
-				if (cmd->next)
-					write(1, " ", 1);
-			}
-		}
-		write (1, "\n", 1);
-	}
-	else
+	int		lessn;
+
+	lessn = ft_issamestr(cmd->next->data, "-n");
+	if (lessn)
+		cmd = cmd->next;
+	while (cmd->next)
 	{
 		cmd = cmd->next;
-		while (cmd->next)
+		if (cmd->data)
 		{
-			cmd = cmd->next;
-			if (cmd->data)
-			{
-				ft_putstr_fd(cmd->data, 1);
-				if (cmd->next)
-					write(1, " ", 1);
-			}
+			ft_putstr_fd(cmd->data, fd_out);
+			if (cmd->next)
+				write(fd_out, " ", 1);
 		}
 	}
+	if (!lessn)
+		write (fd_out, "\n", 1);
 }
 
 void	cd_cmd(t_list *cmd)
@@ -100,7 +89,7 @@ int		ft_exec(t_list *cmd)
 	return (EXIT_SUCCESS);
 }
 
-int		ft_redirect_cmd(t_list *cmd)
+int		ft_redirect_cmd(t_list *cmd, int fd_in, int fd_out)
 {
 	if	(ft_issamestr(cmd->data, "exit"))
 	{
@@ -112,7 +101,7 @@ int		ft_redirect_cmd(t_list *cmd)
 	else if	(ft_issamestr(cmd->data, "cd"))
 		cd_cmd(cmd);
 	else if (ft_issamestr(cmd->data, "echo"))
-		echo_cmd(cmd);
+		echo_cmd(cmd, fd_out);
 	else if	(ft_issamestr(cmd->data, "pwd"))
 		ft_putendl_fd(g_shell.cwd, 1);
 	else if	(ft_issamestr(cmd->data, "export"))
@@ -123,5 +112,9 @@ int		ft_redirect_cmd(t_list *cmd)
 		ft_show_env();
 	else
 		return (ft_exec(cmd));
+	if (fd_in > 2)
+		close(fd_in);
+	if (fd_out > 2)
+		close(fd_out);
 	return (EXIT_SUCCESS);
 }

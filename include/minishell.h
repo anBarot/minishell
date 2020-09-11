@@ -6,15 +6,17 @@
 /*   By: abarot <abarot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/02 20:40:09 by abarot            #+#    #+#             */
-/*   Updated: 2020/09/09 18:33:22 by abarot           ###   ########.fr       */
+/*   Updated: 2020/09/11 18:04:54 by abarot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 // todo list :
 //		- droits sur ex (S_IFREG et S_IXUSR)
-//		- gestion pipe dans redirection cmd
+// 		- refaire création cmd list : inclure parse selon >> > < et |
+//			- gestion pipe dans redirection cmd
+//			- gestion > dans redirection cmd
 // 		- gestion memory leeks echo
-//		- syntax error : si | | ou ;  ;  ==> ft_syntax_error
+// 		- segfault '~'
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
@@ -42,7 +44,6 @@ typedef struct s_shell
 	char			**env;
 	char			**argv;
 	char			*tilde;
-	char			*user;
 	pid_t			cpid;
 	struct stat		stat;
 }				t_shell;
@@ -52,16 +53,16 @@ t_list	*g_garb_cltor;
 
 void	ft_init_shell(char **av, char **envp);
 void	ft_set_cwd();
+void	ft_show_prompt_line();
 char	*ft_multiline_mng(char *line);
 char	*ft_get_cmd_r(char *cmd_line);
 int 	ft_parse_cmdline(char *cmd_line);
-int		ft_redirect_cmd(t_list *cmd);
+int		ft_redirect_cmd(t_list *cmd, int fd_in, int fd_out);
+int		ft_redirection(char *cmd, int *fd_in, int *fd_out);
 void	ft_show_env();
 void	ft_append_env(char *str);
 char	*ft_get_value(char **env, char *var, char sep);
 void	ft_retreive_env(char *str);
 void	ft_inthandler();
 void 	ft_quithandler(); 
-void	ft_set_cwd();
-void	ft_show_current_dir();
 #endif
