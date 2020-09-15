@@ -6,7 +6,7 @@
 /*   By: abarot <abarot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/09 17:31:34 by abarot            #+#    #+#             */
-/*   Updated: 2020/09/10 09:37:04 by abarot           ###   ########.fr       */
+/*   Updated: 2020/09/14 14:28:56 by abarot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,8 @@ int			ft_list_size(t_list *list);
 void		ft_clear_list(t_list **list);
 int			ft_append_elt(t_list **list, void *elt);
 int			ft_issamestr(char *s1, char *s2);
-char		*ft_insert(char *str, char *elt, int index);
+char		*ft_insert(char *str, char *elt, unsigned int index);
 char		*ft_get_word(char *str);
 char		*ft_get_string(char *str);
+char		*ft_delete(char *str, char *elt, unsigned int index);
 #endif

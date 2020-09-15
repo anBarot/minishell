@@ -6,13 +6,13 @@
 /*   By: abarot <abarot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/04 11:37:01 by abarot            #+#    #+#             */
-/*   Updated: 2020/09/04 12:20:31 by abarot           ###   ########.fr       */
+/*   Updated: 2020/09/14 14:28:10 by abarot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_insert(char *str, char *elt, int index)
+char	*ft_insert(char *str, char *elt, unsigned int index)
 {
 	char	*res;	
 	int i;

@@ -6,7 +6,7 @@
 /*   By: abarot <abarot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 18:38:02 by abarot            #+#    #+#             */
-/*   Updated: 2020/07/28 18:07:18 by abarot           ###   ########.fr       */
+/*   Updated: 2020/09/14 15:32:24 by abarot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,5 +31,6 @@ char	*ft_remove_in_str(char *str, char *char_set)
 			str++;
 		}
 	}
+	n_str[in_str] = '\0';
 	return (n_str);
 }

@@ -6,7 +6,7 @@
 /*   By: abarot <abarot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/22 16:00:15 by abarot            #+#    #+#             */
-/*   Updated: 2020/09/11 18:42:26 by abarot           ###   ########.fr       */
+/*   Updated: 2020/09/14 22:07:15 by abarot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	cd_cmd(t_list *cmd)
 
 	if (ft_list_size(cmd) == 1)
 	{
-		if (chdir(ft_get_value(g_shell.env, "HOME", '=')) == -1)
+		if (chdir(ft_get_value(g_shell.envp, "HOME", '=')) == -1)
 			ft_putendl_fd("minishell: cd: HOME not set", 1);
 	}
 	else if (ft_list_size(cmd) > 2)
@@ -59,32 +59,61 @@ void	cd_cmd(t_list *cmd)
 	ft_append_elt(&g_garb_cltor, tmp);
 }
 
-int		ft_exec(t_list *cmd)
+char	*ft_get_path(char *paths, int instc)
 {
-	if (stat(cmd->data, &(g_shell.stat)) == -1 || (g_shell.cpid = fork()) == -1)
-	{	
-		if (*(char *)(cmd->data) == '/')
-		{
-			ft_putstr_fd("minishell: ", 1);
-			ft_putstr_fd(cmd->data, 1);
-			ft_putendl_fd(": No such file or directory", 1);
-			return (EXIT_SUCCESS);
-		}
-		else
-			return (EXIT_FAILURE);
+	int		path_s;
+	int		path_end;
+
+	path_s = 0;
+	while (paths[path_s] && instc)
+	{
+		if (paths[path_s] == ':')
+			instc--;
+		path_s++;
 	}
+	if (!paths[path_s])
+		return (0);
+	if (paths[path_s] == ':')
+		path_s++;
+	path_end = path_s + 1;
+	while (paths[path_end] && paths[path_end] != ':')
+		path_end++;
+	return (ft_substr(paths, path_s, path_end - path_s));
+}
+
+int		ft_exec(t_list *cmd)
+{	
+	int		instc;
+	char	*path_inst;
+	char	*path_str;
+	char	*first_cmd;
+
+	first_cmd = ft_strdup(cmd->data);
+	instc = 0;
+	if ((g_shell.cpid = fork()) == -1)
+		return (EXIT_FAILURE);
 	if (g_shell.cpid > 0)
 	{
 		ft_inthandler();
 		wait(&(g_shell.cpid));
 		kill(g_shell.cpid, SIGTERM);
 	}
-	if	(execve(cmd->data, (char **)ft_list_to_array(cmd), g_shell.env) != EXIT_SUCCESS)
+	if (execve(cmd->data, (char **)ft_list_to_array(cmd), g_shell.envp) == -1)
 	{
-		ft_putstr_fd("minishell: ", 1);
-		ft_putstr_fd(cmd->data, 1);
-		ft_putstr_fd(": Permission denied\n", 1);
-		return (EXIT_SUCCESS);
+		while ((path_inst = ft_get_path(ft_get_value(g_shell.envp, "PATH", '='), instc)))
+		{
+			free(cmd->data);
+			path_str = ft_strjoin(path_inst, "/");
+			ft_append_elt(&g_garb_cltor, path_str);
+			path_str = ft_strjoin(path_str, first_cmd);
+			cmd->data = path_str;
+			if (execve(path_str, (char **)ft_list_to_array(cmd), g_shell.envp) == -1)
+				instc++;
+			else
+				return (EXIT_SUCCESS);
+			free(path_inst);
+		}
+		return (EXIT_FAILURE);
 	}
 	return (EXIT_SUCCESS);
 }
@@ -109,7 +138,7 @@ int		ft_redirect_cmd(t_list *cmd, int fd_in, int fd_out)
 	else if	(ft_issamestr(cmd->data, "unset"))
 		ft_retreive_env(cmd->next->data);
 	else if	(ft_issamestr(cmd->data, "env"))
-		ft_show_env();
+		ft_show_env(g_shell.envp);
 	else
 		return (ft_exec(cmd));
 	if (fd_in > 2)

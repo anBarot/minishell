@@ -6,7 +6,7 @@
 /*   By: abarot <abarot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/09/09 15:15:17 by abarot            #+#    #+#             */
-/*   Updated: 2020/09/11 18:45:14 by abarot           ###   ########.fr       */
+/*   Updated: 2020/09/14 20:34:35 by abarot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,17 +21,18 @@ int		ft_create_cmdlist(char *cmd)
 
 	cmdlist = 0;
 	elt = 0;
-	fd_in = 0;
-	fd_out = 1;
+	fd_in = STDIN_FILENO;
+	fd_out = STDOUT_FILENO;
 	while (*cmd)
 	{
-		printf("\ncmd : %s\n", cmd);
 		if (*cmd == '\"' || *cmd == '\'')
 			elt = ft_get_string(cmd);
 		else
 			elt = ft_get_word(cmd);
 		if (elt && *cmd != '<' && *cmd != '>')
 			ft_append_elt(&cmdlist, elt);
+		else if (elt)
+			free(elt);
 		if (*cmd == '\"' || *cmd == '\'')
 			cmd += 2;
 		else if (*cmd == '>' || *cmd == '<')
@@ -96,13 +97,15 @@ char	*ft_replace_var(char *res, char *cmd_line)
 	char	*var;
 	char	*var_dol;
 
-	var = ft_get_word(cmd_line + 1);
-	if (var[ft_strlen(var) - 1] == '\"')
-		var[ft_strlen(var) - 1] = '\0';
-	var_dol = ft_strjoin("$", var);
-	if (ft_get_value(g_shell.env, var, '='))
+	var = ft_search_var(g_shell.envp, cmd_line + 1);
+	if (var)
+	{
+		var_dol = ft_strjoin("$", var);
 		res = ft_replace_in_str(res, var_dol, 
-			ft_get_value(g_shell.env, var, '='));
+			ft_get_value(g_shell.envp, var, '='));
+	}
+	else
+		return (res);
 	ft_append_elt(&(g_garb_cltor), res);
 	free(var);
 	free(var_dol);
@@ -114,19 +117,21 @@ char	*ft_get_cmd_r(char *cmd_line)
 	char	*res;
 
 	res = cmd_line;
-	// ajouter $? treatment
+	// ---- ajouter $? treatment ----
 	if (*cmd_line == '$' && *(cmd_line + 1) == '?')
 		cmd_line++;
-	if (*cmd_line == '$' && !(ft_count_elt(cmd_line, "\'") % 2))
+	//-------------------------------
+	else if (*cmd_line == '$' && !(ft_count_elt(cmd_line, "\'") % 2))
 		res = ft_replace_var(res, cmd_line);
 	cmd_line++;
 	while (*cmd_line)
 	{
-		if (*cmd_line == '~' && !(ft_count_elt(cmd_line, "\'") % 2) 
+		if (*cmd_line == '\\')
+			cmd_line++;
+		else if (*cmd_line == '~' && !(ft_count_elt(cmd_line, "\'") % 2) 
 				&& !(ft_count_elt(cmd_line, "\"") % 2))
 			res = ft_replace_in_str(res, "~", g_shell.tilde);
-		else if (*cmd_line == '$' && (*(cmd_line - 1) != '\\' &&
-			!(ft_count_elt(cmd_line, "\'") % 2)))
+		else if (*cmd_line == '$' && !(ft_count_elt(cmd_line, "\'") % 2))
 			res = ft_replace_var(res, cmd_line);
 		cmd_line++;
 	}

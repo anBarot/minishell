@@ -6,7 +6,7 @@
 /*   By: abarot <abarot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/02 20:37:55 by abarot            #+#    #+#             */
-/*   Updated: 2020/09/11 18:42:16 by abarot           ###   ########.fr       */
+/*   Updated: 2020/09/15 13:53:46 by abarot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,14 @@
 void	ft_show_prompt_line()
 {
 	ft_putstr_fd(ANSI_COLOR_BLUE, 1);
-	if (ft_get_value(g_shell.env, "USER", '='))
+	if (ft_get_value(g_shell.envp, "USER", '='))
 	{
-		ft_putstr_fd(ft_get_value(g_shell.env, "USER", '='), 1);
+		ft_putstr_fd(ft_get_value(g_shell.envp, "USER", '='), 1);
 		ft_putstr_fd(":", 1);
 	}
-	else if (ft_get_value(g_shell.env, "LOGNAME", '='))
+	else if (ft_get_value(g_shell.envp, "LOGNAME", '='))
 	{
-		ft_putstr_fd(ft_get_value(g_shell.env, "LOGNAME", '='), 1);
+		ft_putstr_fd(ft_get_value(g_shell.envp, "LOGNAME", '='), 1);
 		ft_putstr_fd(":", 1);
 	}
 	else
@@ -80,16 +80,13 @@ int		ft_read_input()
 	ft_show_prompt_line();
 	while (get_next_line(0, &line) == 1)
 	{
-		cmd_line = ft_multiline_mng(line); // gestion multiligne
-		cmd_line_r = ft_get_cmd_r(cmd_line); // remplace les variables $
+		cmd_line = ft_multiline_mng(line); // gestion multiligne (pour ' et ")
+		cmd_line_r = ft_get_cmd_r(cmd_line); // remplace les variables d'environnement $VAR par leur velaur (ex : cd $HOME => cd /home/)
 		if (ft_syntax_ok(cmd_line_r, ';') && ft_syntax_ok(cmd_line_r, '|')) // verif syntaxe
 			ft_parse_cmdline(cmd_line_r);
 		ft_show_prompt_line();
 		if (ft_list_size(g_garb_cltor) > 50)
-		{	
-			ft_clear_list(&(g_garb_cltor));
-			g_garb_cltor = 0;
-		}
+			ft_clear_list(&g_garb_cltor);
 	}
 	ft_putendl_fd("exit", 1);
 	return (EXIT_SUCCESS);
@@ -99,13 +96,13 @@ void	ft_init_shell(char **av, char **envp)
 {
 	g_shell.cpid = 0;
 	g_shell.argv = av;
-	g_shell.env = envp;
-	if (!(g_shell.tilde = ft_get_value(g_shell.env, "HOME", '=')))
+	g_shell.envp = envp;
+	if (!(g_shell.tilde = ft_get_value(g_shell.envp, "HOME", '=')))
 	{
-		if (ft_get_value(g_shell.env, "LOGNAME", '='))
+		if (ft_get_value(g_shell.envp, "LOGNAME", '='))
 		{
 			g_shell.tilde = ft_strjoin("/home/",
-					ft_get_value(g_shell.env, "LOGNAME", '='));
+					ft_get_value(g_shell.envp, "LOGNAME", '='));
 			ft_append_elt(&g_garb_cltor, g_shell.tilde);
 		}
 		else
@@ -114,12 +111,12 @@ void	ft_init_shell(char **av, char **envp)
 	ft_set_cwd();
 }
 
-int		main(int ac, char **av, char **envp)
+int		main(int ac, char **av, char **envp) 
 {
-	g_garb_cltor = 0;
-	signal(SIGINT, ft_inthandler);
-	signal(SIGQUIT, ft_quithandler);
-	if (!ac || !av || !envp)
+	g_garb_cltor = 0; 
+	signal(SIGINT, ft_inthandler); 
+	signal(SIGQUIT, ft_quithandler); 
+	if (!ac || !av || !envp)  
 		return (EXIT_FAILURE);
 	ft_init_shell(av, envp);
 	if (ft_read_input() == EXIT_FAILURE)
