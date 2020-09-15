@@ -6,7 +6,7 @@
 /*   By: abarot <abarot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/22 16:00:15 by abarot            #+#    #+#             */
-/*   Updated: 2020/09/14 22:07:15 by abarot           ###   ########.fr       */
+/*   Updated: 2020/09/15 15:48:49 by abarot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,30 +90,37 @@ int		ft_exec(t_list *cmd)
 
 	first_cmd = ft_strdup(cmd->data);
 	instc = 0;
-	if ((g_shell.cpid = fork()) == -1)
-		return (EXIT_FAILURE);
-	if (g_shell.cpid > 0)
+	g_shell.cpid = fork();
+	while (1)
 	{
-		ft_inthandler();
-		wait(&(g_shell.cpid));
-		kill(g_shell.cpid, SIGTERM);
-	}
-	if (execve(cmd->data, (char **)ft_list_to_array(cmd), g_shell.envp) == -1)
-	{
-		while ((path_inst = ft_get_path(ft_get_value(g_shell.envp, "PATH", '='), instc)))
+		if (g_shell.cpid == -1)
+			return (EXIT_FAILURE);
+		else if (!g_shell.cpid)
 		{
-			free(cmd->data);
-			path_str = ft_strjoin(path_inst, "/");
-			ft_append_elt(&g_garb_cltor, path_str);
-			path_str = ft_strjoin(path_str, first_cmd);
-			cmd->data = path_str;
-			if (execve(path_str, (char **)ft_list_to_array(cmd), g_shell.envp) == -1)
-				instc++;
-			else
-				return (EXIT_SUCCESS);
-			free(path_inst);
+			if (execve(cmd->data, (char **)ft_list_to_array(cmd), g_shell.envp) == -1)
+			{
+				while ((path_inst = ft_get_path(ft_get_value(g_shell.envp, "PATH", '='), instc)))
+				{
+					free(cmd->data);
+					path_str = ft_strjoin(path_inst, "/");
+					ft_append_elt(&g_garb_cltor, path_str);
+					path_str = ft_strjoin(path_str, first_cmd);
+					cmd->data = path_str;
+					if (execve(path_str, (char **)ft_list_to_array(cmd), g_shell.envp) == -1)
+						instc++;
+					else
+						return (EXIT_SUCCESS);
+					free(path_inst);
+				}
+				return (EXIT_FAILURE);
+			}
 		}
-		return (EXIT_FAILURE);
+		else
+		{
+			wait(&g_shell.cpid);
+			ft_putstr_fd("\n", 1);
+			break;
+		}
 	}
 	return (EXIT_SUCCESS);
 }
@@ -140,10 +147,12 @@ int		ft_redirect_cmd(t_list *cmd, int fd_in, int fd_out)
 	else if	(ft_issamestr(cmd->data, "env"))
 		ft_show_env(g_shell.envp);
 	else
+	{
+		if (fd_in > 2)
+			close(fd_in);
+		if (fd_out > 2)
+			close(fd_out);
 		return (ft_exec(cmd));
-	if (fd_in > 2)
-		close(fd_in);
-	if (fd_out > 2)
-		close(fd_out);
+	}
 	return (EXIT_SUCCESS);
 }

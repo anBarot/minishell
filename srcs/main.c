@@ -6,7 +6,7 @@
 /*   By: abarot <abarot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/02 20:37:55 by abarot            #+#    #+#             */
-/*   Updated: 2020/09/15 13:53:46 by abarot           ###   ########.fr       */
+/*   Updated: 2020/09/15 15:36:22 by abarot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,9 +80,9 @@ int		ft_read_input()
 	ft_show_prompt_line();
 	while (get_next_line(0, &line) == 1)
 	{
-		cmd_line = ft_multiline_mng(line); // gestion multiligne (pour ' et ")
-		cmd_line_r = ft_get_cmd_r(cmd_line); // remplace les variables d'environnement $VAR par leur velaur (ex : cd $HOME => cd /home/)
-		if (ft_syntax_ok(cmd_line_r, ';') && ft_syntax_ok(cmd_line_r, '|')) // verif syntaxe
+		cmd_line = ft_multiline_mng(line); 
+		cmd_line_r = ft_get_cmd_r(cmd_line); 
+		if (ft_syntax_ok(cmd_line_r, ';') && ft_syntax_ok(cmd_line_r, '|'))
 			ft_parse_cmdline(cmd_line_r);
 		ft_show_prompt_line();
 		if (ft_list_size(g_garb_cltor) > 50)
@@ -92,10 +92,9 @@ int		ft_read_input()
 	return (EXIT_SUCCESS);
 }
 
-void	ft_init_shell(char **av, char **envp)
+void	ft_init_shell(char **envp)
 {
 	g_shell.cpid = 0;
-	g_shell.argv = av;
 	g_shell.envp = envp;
 	if (!(g_shell.tilde = ft_get_value(g_shell.envp, "HOME", '=')))
 	{
@@ -115,10 +114,10 @@ int		main(int ac, char **av, char **envp)
 {
 	g_garb_cltor = 0; 
 	signal(SIGINT, ft_inthandler); 
-	signal(SIGQUIT, ft_quithandler); 
+	signal(SIGQUIT, ft_quithandler);
 	if (!ac || !av || !envp)  
 		return (EXIT_FAILURE);
-	ft_init_shell(av, envp);
+	ft_init_shell(envp);
 	if (ft_read_input() == EXIT_FAILURE)
 		return (EXIT_FAILURE);
 	ft_clear_list(&g_garb_cltor);

@@ -6,7 +6,7 @@
 /*   By: abarot <abarot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/02 20:40:09 by abarot            #+#    #+#             */
-/*   Updated: 2020/09/15 13:40:33 by abarot           ###   ########.fr       */
+/*   Updated: 2020/09/15 15:35:59 by abarot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 // 		- 'echo azezaeza'
 // 		- pb gestion des elt dans "" et '' -> si "string test "'"" ex : cd ""'"$HOME"'""
 // 		- gestion memory leeks echo
+// 		- gestion "  ; "
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
@@ -44,7 +45,6 @@ typedef struct s_shell
 	char			*cwd;
 	char			*r_cwd;
 	char			**envp;
-	char			**argv;
 	char			*tilde;
 	pid_t			cpid;
 	struct stat		stat;
@@ -53,7 +53,7 @@ typedef struct s_shell
 t_shell g_shell;
 t_list	*g_garb_cltor;
 
-void	ft_init_shell(char **av, char **envp);
+void	ft_init_shell(char **envp);
 void	ft_set_cwd();
 void	ft_show_prompt_line();
 char	*ft_multiline_mng(char *line);
