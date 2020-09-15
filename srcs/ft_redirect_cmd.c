@@ -6,7 +6,7 @@
 /*   By: abarot <abarot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/22 16:00:15 by abarot            #+#    #+#             */
-/*   Updated: 2020/09/15 15:48:49 by abarot           ###   ########.fr       */
+/*   Updated: 2020/09/15 16:20:07 by abarot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,15 +81,23 @@ char	*ft_get_path(char *paths, int instc)
 	return (ft_substr(paths, path_s, path_end - path_s));
 }
 
-int		ft_exec(t_list *cmd)
+int		ft_exec(t_list *cmd, int fd_in, int fd_out)
 {	
 	int		instc;
 	char	*path_inst;
 	char	*path_str;
 	char	*first_cmd;
+	int		stdin_save;
+	int		stdout_save;
 
 	first_cmd = ft_strdup(cmd->data);
 	instc = 0;
+	stdin_save = dup(STDIN_FILENO);
+	stdout_save = dup(STDOUT_FILENO);
+	if (fd_out != STDOUT_FILENO)
+		dup2(fd_out, STDOUT_FILENO);
+	if (fd_in != STDIN_FILENO)
+		dup2(fd_in, STDIN_FILENO);
 	g_shell.cpid = fork();
 	while (1)
 	{
@@ -118,6 +126,14 @@ int		ft_exec(t_list *cmd)
 		else
 		{
 			wait(&g_shell.cpid);
+			if (fd_out != STDOUT_FILENO)
+				close(fd_out);
+			if (fd_in != STDIN_FILENO)
+				close(fd_in);
+			dup2(stdout_save, STDOUT_FILENO);
+			dup2(stdin_save, STDIN_FILENO);
+			close(stdout_save);
+			close(stdin_save);
 			ft_putstr_fd("\n", 1);
 			break;
 		}
@@ -147,12 +163,6 @@ int		ft_redirect_cmd(t_list *cmd, int fd_in, int fd_out)
 	else if	(ft_issamestr(cmd->data, "env"))
 		ft_show_env(g_shell.envp);
 	else
-	{
-		if (fd_in > 2)
-			close(fd_in);
-		if (fd_out > 2)
-			close(fd_out);
-		return (ft_exec(cmd));
-	}
+		return (ft_exec(cmd, fd_in, fd_out));
 	return (EXIT_SUCCESS);
 }
