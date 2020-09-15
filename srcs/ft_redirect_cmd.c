@@ -6,7 +6,7 @@
 /*   By: abarot <abarot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/22 16:00:15 by abarot            #+#    #+#             */
-/*   Updated: 2020/09/15 16:20:07 by abarot           ###   ########.fr       */
+/*   Updated: 2020/09/15 16:52:40 by abarot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,12 +92,16 @@ int		ft_exec(t_list *cmd, int fd_in, int fd_out)
 
 	first_cmd = ft_strdup(cmd->data);
 	instc = 0;
-	stdin_save = dup(STDIN_FILENO);
-	stdout_save = dup(STDOUT_FILENO);
 	if (fd_out != STDOUT_FILENO)
+	{
+		stdout_save = dup(STDOUT_FILENO);
 		dup2(fd_out, STDOUT_FILENO);
+	}
 	if (fd_in != STDIN_FILENO)
+	{
+		stdin_save = dup(STDIN_FILENO);
 		dup2(fd_in, STDIN_FILENO);
+	}
 	g_shell.cpid = fork();
 	while (1)
 	{
@@ -117,24 +121,30 @@ int		ft_exec(t_list *cmd, int fd_in, int fd_out)
 					if (execve(path_str, (char **)ft_list_to_array(cmd), g_shell.envp) == -1)
 						instc++;
 					else
-						return (EXIT_SUCCESS);
+						exit(EXIT_SUCCESS);
 					free(path_inst);
 				}
-				return (EXIT_FAILURE);
+				ft_putstr_fd(first_cmd, 1);
+				ft_putstr_fd(": command not found\n", 1);
+				ft_clear_list(&cmd);
+				exit(EXIT_FAILURE);
 			}
 		}
 		else
 		{
 			wait(&g_shell.cpid);
 			if (fd_out != STDOUT_FILENO)
+			{
 				close(fd_out);
+				dup2(stdout_save, STDOUT_FILENO);
+				close(stdout_save);
+			}
 			if (fd_in != STDIN_FILENO)
+			{
 				close(fd_in);
-			dup2(stdout_save, STDOUT_FILENO);
-			dup2(stdin_save, STDIN_FILENO);
-			close(stdout_save);
-			close(stdin_save);
-			ft_putstr_fd("\n", 1);
+				dup2(stdin_save, STDIN_FILENO);
+				close(stdin_save);
+			}
 			break;
 		}
 	}
