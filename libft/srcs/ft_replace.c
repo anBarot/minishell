@@ -1,26 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_insert.c                                        :+:      :+:    :+:   */
+/*   ft_replace.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: abarot <abarot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/09/04 11:37:01 by abarot            #+#    #+#             */
-/*   Updated: 2020/10/01 10:17:07 by abarot           ###   ########.fr       */
+/*   Created: 2020/07/28 17:50:53 by abarot            #+#    #+#             */
+/*   Updated: 2020/10/01 10:23:20 by abarot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_insert(char *str, char *elt, unsigned int index)
+char	*ft_replace(char *old_str, char *to_rpl, char *elt, int index)
 {
-	char	*res;
+	char	*n_str;
 
-	if (!str || !elt || index > ft_strlen(str) ||
-		!(res = (char *)ft_calloc(1, ft_strlen(str) + ft_strlen(elt) + 1)))
+	if (!old_str || !to_rpl || !elt || !(n_str = ft_calloc(ft_strlen(old_str)
+		+ ft_strlen(elt) - ft_strlen(to_rpl) + 1, 2)))
 		return (0);
-	memcpy(res, str, index);
-	memcpy(res + index, elt, ft_strlen(elt));
-	memcpy(res + index + ft_strlen(elt), str + index, ft_strlen(str) - index);
-	return (res);
+	ft_memcpy(n_str, old_str, index);
+	ft_memcpy(n_str + index, elt, ft_strlen(elt));
+	ft_memcpy(n_str + index + ft_strlen(elt), old_str + index +
+	ft_strlen(to_rpl), ft_strlen(old_str) - index);
+	return (n_str);
 }

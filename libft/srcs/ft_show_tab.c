@@ -1,21 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipe_ft.c                                          :+:      :+:    :+:   */
+/*   ft_show_tab.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: abarot <abarot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/09/01 15:23:28 by abarot            #+#    #+#             */
-/*   Updated: 2020/09/04 09:51:14 by abarot           ###   ########.fr       */
+/*   Created: 2020/10/01 10:58:22 by abarot            #+#    #+#             */
+/*   Updated: 2020/10/01 10:59:16 by abarot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int		ft_manage_pipe(char **pipe_list)
+void	ft_show_tab(char **envp)
 {
-	if (pipe_list)
-		printf("\npipe detected\n");
-	return (EXIT_SUCCESS);
+	int	i;
+
+	i = 0;
+	while (envp[i])
+	{
+		ft_putendl_fd(envp[i], 1);
+		i++;
+	}
 }
- 

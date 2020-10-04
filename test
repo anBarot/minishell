@@ -1,7 +1,0 @@
-total 48
-drwxr-xr-x 2 abarot abarot  4096 sept.  4 13:22 include
-drwxr-xr-x 3 abarot abarot  4096 sept. 15 16:52 libft
--rwxr-xr-x 1 abarot abarot  1439 sept. 11 18:29 Makefile
--rwxrwxr-x 1 abarot abarot 28808 sept. 15 16:52 minishell
-drwxr-xr-x 2 abarot abarot  4096 sept. 15 16:52 srcs
--rw-r--r-- 1 abarot abarot     0 sept. 15 16:52 test
