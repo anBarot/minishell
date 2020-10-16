@@ -6,7 +6,7 @@
 /*   By: abarot <abarot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/09 17:31:34 by abarot            #+#    #+#             */
-/*   Updated: 2020/10/02 16:48:20 by abarot           ###   ########.fr       */
+/*   Updated: 2020/10/15 15:10:56 by abarot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,7 @@ int						ft_append_elt(t_list **list, void *elt);
 int						ft_issamestr(char *s1, char *s2);
 char					*ft_insert(char *str, char *elt, unsigned int index);
 char					*ft_get_word(char *str);
+char					*ft_get_word_no_quote(char *str);
 char					*ft_get_string(char *str);
 char					*ft_delete(char *str, char *elt, unsigned int index);
 int						ft_putchar(int c);
@@ -108,4 +109,5 @@ char					*ft_search_var(char **envp, char *str);
 void					ft_restore_stdfd(int *p_fd, int *saved_fd);
 void					ft_init_stdfd(int *n_fd, int *saved_fd);
 void					ft_replace_stdfd(int *n_fd);
+char					**ft_copy_tab(char **cp, char **argv);
 #endif

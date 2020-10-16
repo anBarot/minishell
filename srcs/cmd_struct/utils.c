@@ -6,7 +6,7 @@
 /*   By: abarot <abarot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/03 14:46:13 by abarot            #+#    #+#             */
-/*   Updated: 2020/10/03 14:52:07 by abarot           ###   ########.fr       */
+/*   Updated: 2020/10/16 19:07:42 by abarot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 int			this_is_operator(char *cmd, char *operator)
 {
-	int	i;
-	int	n;
-	int	j;
+	int		i;
+	int		n;
+	int		j;
 
 	i = 0;
 	j = -1;
@@ -48,55 +48,6 @@ int			count_struct(t_cmd *cmd)
 	return (i);
 }
 
-static char	*cmd_without_bs2(char *cmd, int i)
-{
-	int		j;
-	char	*cmd_without_bs;
-
-	j = 0;
-	if (!(cmd_without_bs = ft_calloc(sizeof(char), (i + 1))))
-		return (NULL);
-	i = 0;
-	while (cmd[i])
-	{
-		if (cmd[i] != '\\')
-		{
-			cmd_without_bs[j] = cmd[i];
-			j++;
-		}
-		i++;
-	}
-	free(cmd);
-	return (cmd_without_bs);
-}
-
-char		*cmd_without_bs(char *cmd)
-{
-	int	i;
-	int	j;
-	int	bs;
-
-	i = 0;
-	j = 0;
-	bs = 0;
-	if (cmd)
-	{
-		while (cmd[i])
-		{
-			if (cmd[i] == '\\')
-			{
-				bs = 1;
-				j++;
-			}
-			i++;
-		}
-		if (bs == 1)
-			return (cmd_without_bs2(cmd, j));
-		return (cmd);
-	}
-	return (NULL);
-}
-
 int			path_or_cmd(char *argv)
 {
 	if (ft_issamestr(argv, "exit") || ft_issamestr(argv, "cd") ||
@@ -105,4 +56,43 @@ int			path_or_cmd(char *argv)
 		ft_issamestr(argv, "env"))
 		return (CMD);
 	return (PATH);
+}
+
+char		quote_management(char *txt)
+{
+	char	c;
+	int		i;
+
+	i = 0;
+	c = 0;
+	while (txt[i])
+	{
+		c = txt[i];
+		if (c == '\\')
+			i++;
+		while ((c == '"' || c == '\'') && txt[++i])
+		{
+			if (c == '"' && txt[i] == '\\')
+				i++;
+			else if (txt[i] == c)
+				break ;
+		}
+		if (txt[i])
+		{
+			c = 0;
+			i++;
+		}
+	}
+	return (c);
+}
+
+void		print_msg_error(int end)
+{
+	write(1, UNEXP_NL, ft_strlen(UNEXP_NL));
+	if (end == 1)
+		write(1, ";'\n", 3);
+	else if (end == 2)
+		write(1, ";;'\n", 4);
+	else
+		write(1, "newline'\n", 10);
 }

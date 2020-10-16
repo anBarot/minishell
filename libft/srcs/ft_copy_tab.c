@@ -1,35 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_search_var.c                                    :+:      :+:    :+:   */
+/*   ft_copy_tab.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: abarot <abarot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/10/01 11:13:46 by abarot            #+#    #+#             */
-/*   Updated: 2020/10/08 18:15:40 by abarot           ###   ########.fr       */
+/*   Created: 2020/10/15 15:11:25 by abarot            #+#    #+#             */
+/*   Updated: 2020/10/15 15:24:14 by abarot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_search_var(char **envp, char *str)
+char	**ft_copy_tab(char **cp, char **argv)
 {
 	int		i;
-	int		start;
-	int		end;
 
 	i = 0;
-	start = 0;
-	end = 0;
-	if (*str == '{')
+	if (!(cp = ft_calloc(ft_count_line(argv) + 1, sizeof(char*))))
+		return (0);
+	while (argv[i])
 	{
-		start++;
-		end++;
-	}
-	while (envp[i] && ft_strncmp(envp[i], str + start,
-			ft_varsize(envp[i], '=') - end))
+		cp[i] = ft_strdup(argv[i]);
 		i++;
-	if (envp[i])
-		return (ft_substr(str, start, ft_varsize(envp[i], '=')));
-	return (0);
+	}
+	cp[i] = 0;
+	return (cp);
 }
