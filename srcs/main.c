@@ -6,7 +6,7 @@
 /*   By: abarot <abarot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/02 20:37:55 by abarot            #+#    #+#             */
-/*   Updated: 2020/10/20 10:45:21 by abarot           ###   ########.fr       */
+/*   Updated: 2020/10/20 15:24:04 by abarot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,51 +33,22 @@ void	ft_show_prompt_line(void)
 	ft_putstr_fd(ANSI_COLOR_RESET, 1);
 }
 
-int		syntax(char *cmd_line, char c)
-{
-	int		i;
-
-	i = 0;
-	while (*cmd_line)
-	{
-		while (*(cmd_line + i) && (*(cmd_line + i) != c ||
-			(*(cmd_line + i) == c && ((ft_count_elt(cmd_line + i, "\"") % 2) ||
-			(ft_count_elt(cmd_line + i, "\'") % 2) ||
-			*(cmd_line + i - 1) == '\\'))))
-			i++;
-		if (!*(cmd_line + i))
-			return (1);
-		*(cmd_line + i) = '\0';
-		if (ft_count_elt(cmd_line, " ") == ft_strlen(cmd_line))
-		{
-			ft_putstr_fd("minishell: syntax error near unexpected token '", 1);
-			write(1, &c, 1);
-			ft_putstr_fd("'\n", 1);
-			return (0);
-		}
-		*(cmd_line + i) = c;
-		cmd_line += i + 1;
-		i = 0;
-	}
-	return (1);
-}
-
 int		ft_read_input(void)
 {
 	char *line;
-	char *cmd_line;
+	char *cmd_l;
 
 	ft_show_prompt_line();
 	while (get_next_line(STDIN_FILENO, &line) == 1)
 	{
-		cmd_line = ft_multiline_mng(line);
+		cmd_l = ft_multiline_mng(line);
 		g_shell.in_multil = 0;
-		cmd_line = ft_get_cmd_r(cmd_line);
-		if (cmd_line)
-		{
-			if (syntax(cmd_line, ';') && syntax(cmd_line, '|'))
-				ft_get_subcmd(cmd_line);
-		}
+		cmd_l = ft_get_cmd_r(cmd_l);
+		if (cmd_l && syntax(cmd_l, ';') && syntax(cmd_l, '|')
+			&& notempty(cmd_l))
+			ft_get_subcmd(cmd_l);
+		if (cmd_l)
+			free(cmd_l);
 		if (g_shell.exit == 1)
 			break ;
 		ft_show_prompt_line();
