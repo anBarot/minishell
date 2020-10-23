@@ -6,7 +6,7 @@
 /*   By: abarot <abarot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/20 11:30:20 by abarot            #+#    #+#             */
-/*   Updated: 2020/10/20 13:11:33 by abarot           ###   ########.fr       */
+/*   Updated: 2020/10/23 10:29:25 by abarot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,8 @@ int		syntax(char *cmd_line, char c)
 		if (!*(cmd_line + i))
 			return (1);
 		*(cmd_line + i) = '\0';
-		if (ft_count_elt(cmd_line, " ") == ft_strlen(cmd_line))
+		if (ft_count_elt(cmd_line, " ") + ft_count_elt(cmd_line, "\t")
+			== ft_strlen(cmd_line))
 		{
 			*(cmd_line + i) = c;
 			ft_syntax_error_disp(c);

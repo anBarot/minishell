@@ -6,7 +6,7 @@
 /*   By: abarot <abarot@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/07 12:37:35 by abarot            #+#    #+#             */
-/*   Updated: 2020/10/16 18:49:20 by abarot           ###   ########.fr       */
+/*   Updated: 2020/10/23 10:15:00 by abarot           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,9 +72,9 @@ char			**ft_get_argv(char *cmd)
 		return (0);
 	while (*cmd)
 	{
-		while (*cmd == ' ')
+		while (ft_isspace(*cmd))
 			cmd++;
-		while (*cmd && *cmd != ' ')
+		while (*cmd && !ft_isspace(*cmd))
 		{
 			if (argv[i])
 				ft_argv_str_and_char(&cmd, argv, i);
